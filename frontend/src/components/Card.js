@@ -14,7 +14,7 @@ function Card({ imageName, name, resume, id, parentAction }) {
   return (
     <div className="row card-container">
       <div className="col-2">
-        <img src={'/images/default_image.jpeg'}  className=" avatar" alt={name} />
+        <img src={imageName}  className=" avatar" alt={name} />
       </div>
       <div className="card-description col-7">
         <h5 className="card-title">{name}</h5>
