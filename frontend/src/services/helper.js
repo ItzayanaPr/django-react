@@ -25,7 +25,7 @@ function postCientifica (cientifica) {
 
 function deleteCientifica (id) {
   return axios
-    .delete(`http://localhost:8000/api/cientificass/${id}`)
+    .delete(`http://localhost:8000/api/cientificass/${id}/`)
     .then(response => {
       console.log('deleted', response);
     })
