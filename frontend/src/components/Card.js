@@ -1,24 +1,28 @@
 import IconButton from "./IconButton.js";
+import { deleteCientifica } from '../services/helper';
 
-function Card({ imageName, name, resume, id }) {
+function Card({ imageName, name, resume, id, parentAction }) {
 
-  const deleteWoman = (id) => {
-    console.log('deleting', id)
+  const deleteCientist = (id) => {
+    console.log('deleting', id);
+    deleteCientifica(id)
   }
 
+  const modifyCientist = (id) => {
+    console.log('editing', id)
+  }
   return (
-    <div className="card-container">
-      <div className="avatar">
-        <img src={`https://randomuser.me/api/portraits/women/${imageName}`} className=" avatar" alt="Ada Lovelance" />
+    <div className="row card-container">
+      <div className="col-2">
+        <img src={'/images/default_image.jpeg'}  className=" avatar" alt={name} />
       </div>
-      <div className="card-description">
+      <div className="card-description col-7">
         <h5 className="card-title">{name}</h5>
         <p className="card-text">{resume}</p>        
       </div>
-      <div className="card-actions">
-        {/* <button className="btn btn-primary float-end" onClick={() => console.log(id)}>Más información</button> */}
-        <IconButton iconName="pencil-square" textColor="primary" action={deleteWoman} aditionalInfo={id}/>
-        <IconButton iconName="trash" textColor="danger" action={deleteWoman} aditionalInfo={id}/>
+      <div className="card-actions col-2">
+        <IconButton iconName="pencil-square" textColor="primary" action={modifyCientist} aditionalInfo={id}/>
+        <IconButton iconName="trash" textColor="danger" action={deleteCientist} aditionalInfo={id}/>
       </div>
     </div>
   );
