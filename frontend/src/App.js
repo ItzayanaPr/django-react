@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import {getCientificas, postCientifica} from './services/helper'
+import {getCientificas, addCientifica} from './services/helper'
 
 import Card from './components/Card';
 
@@ -21,14 +21,20 @@ function App() {
     })
   }
 
-  const addCientifica = () => {
-    postCientifica(cientifica).then(response => {
+  const newCientifica = () => {
+    addCientifica(cientifica).then(response => {
       console.log('clicking - ',response);
     })
   }
 
-	const onBlurInput = (e) => {
-		cientifica[e.target.id] = e.target.value;
+	const onChangeInput = (e) => {
+		if(e.target.id === 'foto') {
+			console.log(e.target.files[0]);
+			const file = e.target.files[0];
+			cientifica[e.target.id] = file;
+		} else {
+			cientifica[e.target.id] = e.target.value;
+		}
 	}
 
   useEffect(() => {
@@ -76,29 +82,29 @@ function App() {
 							<form>
 								<div className="mb-3">
 									<label htmlFor="nombre" className="form-label">Nombre Cientifica</label>
-									<input type="text" className="form-control" id="nombre" onBlur={onBlurInput}/>
+									<input type="text" className="form-control" id="nombre" onChange={onChangeInput}/>
 								</div>
 								<div className="mb-3">
 									<label htmlFor="fecha_nacimiento" className="form-label">Fecha Nacimiento</label>
-									<input type="date" className="form-control" id="fecha_nacimiento" onBlur={onBlurInput}/>
+									<input type="date" className="form-control" id="fecha_nacimiento" onChange={onChangeInput}/>
 								</div>
 								<div className="mb-3">
 									<label htmlFor="nacionalidad" className="form-label">Nacionalidad</label>
-									<input type="text" className="form-control" id="nacionalidad" onBlur={onBlurInput}/>
+									<input type="text" className="form-control" id="nacionalidad" onChange={onChangeInput}/>
 								</div>
 								<div className="mb-3">
 									<label htmlFor="foto" className="form-label">Foto</label>
-									<input type="file" className="form-control" id="foto" onBlur={onBlurInput}/>
+									<input type="file" className="form-control" id="foto" onChange={onChangeInput} accept="image/jpg,image/jpeg,image/png,image/gif"/>
 								</div>
 								<div className="mb-3">
 									<label htmlFor="descripcion" className="form-label">Descripción</label>
-									<textarea className="form-control" id="descripcion" rows={5} onBlur={onBlurInput}/>
+									<textarea className="form-control" id="descripcion" rows={5} onChange={onChangeInput}/>
 								</div>
 							</form>
 						</div>
 						<div className="modal-footer">
 							<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="button" className="btn btn-primary" onClick={addCientifica}>Understood</button>
+							<button type="button" className="btn btn-primary" onClick={newCientifica}>Understood</button>
 						</div>
 					</div>
 				</div>
