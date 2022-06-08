@@ -1,18 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import {getCientificas, addCientifica} from './services/helper'
+import { useState, useEffect} from 'react';
+import {getCientificas, addCientifica, deleteCientifica, modifyCientifica} from './services/helper'
 
 import Card from './components/Card';
+import Modal from './components/Modal';
 
 import './App.css';
 
 function App() {
 
-	const cientifica = {};
-	const addCientificaModalRef = useRef(null);
-
   const [cientificas, setCientificas] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-	const [dataJson, setDataJson] = useState({});
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [initialModalData, setInitialModalData] = useState({})
 
   const getCientificasData = () => {
     getCientificas().then(response => {
@@ -21,20 +20,30 @@ function App() {
     })
   }
 
-  const newCientifica = () => {
-    addCientifica(cientifica).then(response => {
-      console.log('clicking - ',response);
+  const newCientifica = (cientifica) => {
+		console.log('add', cientifica)
+    addCientifica(cientifica).then((response )=> {
+      console.log('adding - ',response);
+			setIsAddModalOpen(false);
+			getCientificasData();
     })
   }
 
-	const onChangeInput = (e) => {
-		if(e.target.id === 'foto') {
-			console.log(e.target.files[0]);
-			const file = e.target.files[0];
-			cientifica[e.target.id] = file;
-		} else {
-			cientifica[e.target.id] = e.target.value;
-		}
+	const removeCientifica = (id) => {
+		deleteCientifica(id).then(response => {
+			getCientificasData();
+		})
+	}
+
+	const editarCientifica = (cientifica) => {
+		modifyCientifica(cientifica).then(response => {
+			getCientificasData();
+		})
+	}
+
+	const openEditCientifica = (cientifica) => {
+		setIsEditModalOpen(true);
+		setInitialModalData(cientifica)
 	}
 
   useEffect(() => {
@@ -46,69 +55,48 @@ function App() {
       <section className="main-header">
         <h1>Mujeres en tecnología y ciencia.</h1>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-6 col-12">
             General description
           </div>
-          <div className="col-md-6">
-            <button className="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Agregar</button>
+          <div className="col-md-6 col-12">
+            <button className="btn btn-primary float-end" onClick={() => setIsAddModalOpen(true)}>Agregar</button>
           </div>
         </div>
       </section>
       <section>
         <div className="row">
-          {
-            cientificas.map((cientifica, index) => {
-              return <Card 
-                imageName={cientifica.foto}  
-                name={cientifica.nombre} 
-                resume={cientifica.descripcion} 
-                id={cientifica.id}
-                key={`${cientifica.nombre}-${cientifica.id}`}
-              />
-            })
-          }
+						{
+							cientificas.map((cientifica) => {
+								return (
+									<div className="col-12 col-md-6 col-lg-4" key={`${cientifica.nombre}-${cientifica.id}`}>
+										<Card 
+											cientifica={cientifica}											
+											editAction={openEditCientifica}
+											deleteAction={removeCientifica}								
+										/>
+									</div>)
+							})
+						}					 
         </div>        
       </section>
 
       {/* Modal to add cientifica */}
-			<div className="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-				<div className="modal-dialog modal-lg">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h5 className="modal-title" id="staticBackdropLabel">Agregar Cientifica</h5>
-							<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div className="modal-body">
-							<form>
-								<div className="mb-3">
-									<label htmlFor="nombre" className="form-label">Nombre Cientifica</label>
-									<input type="text" className="form-control" id="nombre" onChange={onChangeInput}/>
-								</div>
-								<div className="mb-3">
-									<label htmlFor="fecha_nacimiento" className="form-label">Fecha Nacimiento</label>
-									<input type="date" className="form-control" id="fecha_nacimiento" onChange={onChangeInput}/>
-								</div>
-								<div className="mb-3">
-									<label htmlFor="nacionalidad" className="form-label">Nacionalidad</label>
-									<input type="text" className="form-control" id="nacionalidad" onChange={onChangeInput}/>
-								</div>
-								<div className="mb-3">
-									<label htmlFor="foto" className="form-label">Foto</label>
-									<input type="file" className="form-control" id="foto" onChange={onChangeInput} accept="image/jpg,image/jpeg,image/png,image/gif"/>
-								</div>
-								<div className="mb-3">
-									<label htmlFor="descripcion" className="form-label">Descripción</label>
-									<textarea className="form-control" id="descripcion" rows={5} onChange={onChangeInput}/>
-								</div>
-							</form>
-						</div>
-						<div className="modal-footer">
-							<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="button" className="btn btn-primary" onClick={newCientifica}>Understood</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			<Modal 
+				idModal="agregarCientifica" 
+				label={'Agregar cientifica'} 
+				isOpen={isAddModalOpen} 
+				onCancel={() => setIsAddModalOpen(false)} 
+				onSave={newCientifica}/> 
+
+			{/* Modal to edit cientifica */}
+			<Modal 
+				idModal="editarCientifica" 
+				label={'Modificar cientifica'} 
+				isOpen={isEditModalOpen} 
+				initialValue={initialModalData} 
+				onCancel={() => setIsEditModalOpen(false)} 
+				onSave={editarCientifica}/> 
+			
     </div>
   );
 }
