@@ -27,7 +27,8 @@ function InputField({idInput, type, initialValue, label, rows = 1, parentAction}
           rows={rows} 
           value={inputValue}
           onBlur={onBlurInput}
-          onChange={onChangeInput}/>
+          onChange={onChangeInput} 
+          required={true}/>
       </div>
     )
   } else {
@@ -39,7 +40,8 @@ function InputField({idInput, type, initialValue, label, rows = 1, parentAction}
           id={idInput} 
           value={inputValue}
           onBlur={onBlurInput}
-          onChange={onChangeInput}/>
+          onChange={onChangeInput} 
+          required={true}/>
       </div>
     );
   }  

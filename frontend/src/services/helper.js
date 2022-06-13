@@ -2,7 +2,7 @@ import axios from 'axios';
 
 function getCientificas () {
   return axios
-      .get('http://localhost:8000/api/cientificass/')
+      .get('http://localhost:8000/api/cientificas/listado/')
       .then(response => {
         return response.data;
       })
@@ -21,7 +21,7 @@ function addCientifica (cientifica) {
   form_data.append('descripcion', cientifica.descripcion);
   return axios
     .post(
-      'http://localhost:8000/api/cientificass/',
+      'http://localhost:8000/api/cientificas/listado/',
       form_data,{
         headers: {
           'content-type': 'multipart/form-data'
@@ -36,7 +36,7 @@ function addCientifica (cientifica) {
 
 function deleteCientifica (id) {
   return axios
-    .delete(`http://localhost:8000/api/cientificass/${id}/`)
+    .delete(`http://localhost:8000/api/cientificas/listado/${id}/`)
     .then(response => {
       console.log('deleted', response);
     })
@@ -55,7 +55,7 @@ function modifyCientifica(cientifica){
   form_data.append('descripcion', cientifica.descripcion);
   return axios
       .put(
-        `http://localhost:8000/api/cientificass/${cientifica.id}/`,
+        `http://localhost:8000/api/cientificas/listado/${cientifica.id}/`,
         form_data, {
         headers: {
           'content-type': 'multipart/form-data'
