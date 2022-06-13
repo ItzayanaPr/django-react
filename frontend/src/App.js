@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import {getCientificas, addCientifica, deleteCientifica, modifyCientifica} from './services/helper'
+import {getCientificas, addCientifica, deleteCientifica, modifyCientifica, getAreas} from './services/helper'
 
 import Card from './components/Card';
 import Modal from './components/Modal';
@@ -9,9 +9,10 @@ import './App.css';
 function App() {
 
   const [cientificas, setCientificas] = useState([]);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [areas, setAreas] = useState([]);
+	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-	const [initialModalData, setInitialModalData] = useState({})
+	const [initialModalData, setInitialModalData] = useState({});
 
   const getCientificasData = () => {
     getCientificas().then(response => {
@@ -19,6 +20,13 @@ function App() {
       setCientificas(response)
     })
   }
+
+	const getAreasData = () => {
+		getAreas().then(response => {
+      console.log(response);
+      setAreas(response)
+    })
+	}
 
   const newCientifica = (cientifica) => {
 		console.log('add', cientifica)
@@ -37,6 +45,7 @@ function App() {
 
 	const editarCientifica = (cientifica) => {
 		modifyCientifica(cientifica).then(response => {
+			setIsEditModalOpen(false);
 			getCientificasData();
 		})
 	}
@@ -48,6 +57,7 @@ function App() {
 
   useEffect(() => {
     getCientificasData();
+		getAreasData();
   }, []);
 
   return (
@@ -56,10 +66,12 @@ function App() {
         <h1>Mujeres en tecnología y ciencia.</h1>
         <div className="row">
           <div className="col-md-6 col-12">
-            General description
+						A lo largo de la historia, mujeres extraordinarias han demostrado con hechos la relevancia del 
+						papel de la mujer en la ciencia, dejando un legado muy importante a la humanidad. 
           </div>
           <div className="col-md-6 col-12">
-            <button className="btn btn-primary float-end" onClick={() => setIsAddModalOpen(true)}>Agregar</button>
+            <button className="btn btn-success float-end mr-2" onClick={() => setIsAddModalOpen(true)}>Agregar</button>
+						<button className="btn btn-primary float-end mr-2">Ver areas</button>
           </div>
         </div>
       </section>
@@ -81,22 +93,29 @@ function App() {
       </section>
 
       {/* Modal to add cientifica */}
-			<Modal 
+			{
+				isAddModalOpen ?
+				<Modal 
 				idModal="agregarCientifica" 
 				label={'Agregar cientifica'} 
-				isOpen={isAddModalOpen} 
+				checksArray={areas}
 				onCancel={() => setIsAddModalOpen(false)} 
-				onSave={newCientifica}/> 
+				onSave={newCientifica}/>
+				: null
+			}
 
 			{/* Modal to edit cientifica */}
-			<Modal 
+			{
+				isEditModalOpen ? 
+				<Modal 
 				idModal="editarCientifica" 
 				label={'Modificar cientifica'} 
-				isOpen={isEditModalOpen} 
+				checksArray={areas}
 				initialValue={initialModalData} 
 				onCancel={() => setIsEditModalOpen(false)} 
 				onSave={editarCientifica}/> 
-			
+				: null
+			}			
     </div>
   );
 }
