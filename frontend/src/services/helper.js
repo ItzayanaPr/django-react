@@ -78,10 +78,31 @@ function getAreas () {
       .catch(error => console.error(error));
 }
 
+function addArea (area) {
+  console.log('post - ',area);
+  let form_data = new FormData();
+  form_data.append('nombre', area.nombre);
+  form_data.append('descripcion', area.descripcion);
+  return axios
+          .post(
+            'http://localhost:8000/areas/listado/',
+            form_data,{
+              headers: {
+                'content-type': 'multipart/form-data'
+              }
+            }
+          )
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => console.error(error));
+}
+
 export {
   getCientificas, 
   addCientifica,
   deleteCientifica,
   modifyCientifica,
-  getAreas
+  getAreas,
+  addArea
 }

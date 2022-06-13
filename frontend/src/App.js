@@ -1,8 +1,10 @@
-import { useState, useEffect} from 'react';
-import {getCientificas, addCientifica, deleteCientifica, modifyCientifica, getAreas} from './services/helper'
+import React, { useState, useEffect} from 'react';
+import {getCientificas, addCientifica, deleteCientifica, modifyCientifica, getAreas, addArea} from './services/helper';
 
 import Card from './components/Card';
 import Modal from './components/Modal';
+
+import AreaCard from './components/AreaCard';
 
 import './App.css';
 
@@ -13,6 +15,7 @@ function App() {
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 	const [initialModalData, setInitialModalData] = useState({});
+	const [isAddAreaModalOpen, setIsAddAreaModalOpen] = useState(false);
 
   const getCientificasData = () => {
     getCientificas().then(response => {
@@ -55,6 +58,15 @@ function App() {
 		setInitialModalData(cientifica)
 	}
 
+  const newArea = (area) => {
+		console.log('add', area)
+    addArea(area).then((response )=> {
+      console.log('adding - ',response);
+			setIsAddAreaModalOpen(false);
+			getAreasData();
+    })
+  }
+
   useEffect(() => {
     getCientificasData();
 		getAreasData();
@@ -70,8 +82,7 @@ function App() {
 						papel de la mujer en la ciencia, dejando un legado muy importante a la humanidad. 
           </div>
           <div className="col-md-6 col-12">
-            <button className="btn btn-success float-end mr-2" onClick={() => setIsAddModalOpen(true)}>Agregar</button>
-						<button className="btn btn-primary float-end mr-2">Ver areas</button>
+            <button className="btn btn-success float-end mx-2" onClick={() => setIsAddModalOpen(true)}>Agregar cientifica</button>										
           </div>
         </div>
       </section>
@@ -85,6 +96,34 @@ function App() {
 											cientifica={cientifica}											
 											editAction={openEditCientifica}
 											deleteAction={removeCientifica}								
+										/>
+									</div>)
+							})
+						}					 
+        </div>        
+      </section>
+			<hr className="my-5"/>
+			<section>
+        <h1>Áreas de la ciencia.</h1>
+        <div className="row">
+				<div className="row">
+          <div className="col-md-6 col-12"></div>
+          <div className="col-md-6 col-12">
+						<button className="btn btn-success float-end mx-2" onClick={() => setIsAddAreaModalOpen(true)}>Agregar area</button>								
+          </div>
+        </div>
+          <div className="col-md-6 col-12 col-md-offset-6">
+            {/* <button className="btn btn-primary float-end mx-2" onClick={returnToCientificasPage}>Ver cientificas</button> */}
+            						
+          </div>
+        </div>
+        <div className="row">
+						{
+							areas.map((area) => {
+								return (
+									<div className="col-12 col-md-6 col-lg-4" key={`${area.nombre}-${area.id}`}>
+										<AreaCard
+											area={area}						
 										/>
 									</div>)
 							})
@@ -115,7 +154,17 @@ function App() {
 				onCancel={() => setIsEditModalOpen(false)} 
 				onSave={editarCientifica}/> 
 				: null
-			}			
+			}
+			{/* Modal to add area */}
+			{
+				isAddAreaModalOpen ?
+				<Modal 
+				idModal="agregarArea" 
+				label={'Agregar Area'}
+				onCancel={() => setIsAddAreaModalOpen(false)} 
+				onSave={newArea}/>
+				: null
+			}
     </div>
   );
 }

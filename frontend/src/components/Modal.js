@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {Fragment, useState} from 'react';
 import InputField from './Input';
 import RadioButton from './RadioButton';
 
@@ -28,51 +28,71 @@ function Modal({idModal, label, initialValue = {}, checksArray = [], onCancel, o
           </div>
           <div className="modal-body">
             <form className="was-validated">
-              <InputField 
-                idInput={'nombre'} 
-                type={'text'} 
-                initialValue={cientificaObj.nombre ? cientificaObj.nombre : ''} 
-                label={'Nombre cientifica'}
-                parentAction={setValue}/>
+              { idModal === 'agregarArea' ? 
+                <Fragment>
+                  <InputField 
+                    idInput={'nombre'} 
+                    type={'text'} 
+                    initialValue={cientificaObj.nombre ? cientificaObj.nombre : ''} 
+                    label={'Nombre cientifica'}
+                    parentAction={setValue}/>
+                  <InputField 
+                    idInput={'descripcion'} 
+                    type={'textarea'} 
+                    initialValue={cientificaObj.descripcion ? cientificaObj.descripcion : ''} 
+                    label={'Descripción'}
+                    rows={5}
+                    parentAction={setValue}/>
+                </Fragment>
+                : 
+                <Fragment>
+                  <InputField 
+                    idInput={'nombre'} 
+                    type={'text'} 
+                    initialValue={cientificaObj.nombre ? cientificaObj.nombre : ''} 
+                    label={'Nombre cientifica'}
+                    parentAction={setValue}/>
 
-              <InputField 
-                idInput={'fecha_nacimiento'} 
-                type={'date'} 
-                initialValue={cientificaObj.fecha_nacimiento ? cientificaObj.fecha_nacimiento : ''} 
-                label={'Fecha Nacimiento'}
-                parentAction={setValue}/>
+                  <InputField 
+                    idInput={'fecha_nacimiento'} 
+                    type={'date'} 
+                    initialValue={cientificaObj.fecha_nacimiento ? cientificaObj.fecha_nacimiento : ''} 
+                    label={'Fecha Nacimiento'}
+                    parentAction={setValue}/>
 
-              <InputField 
-                idInput={'nacionalidad'} 
-                type={'text'} 
-                initialValue={cientificaObj.nacionalidad ? cientificaObj.nacionalidad : ''} 
-                label={'Nacionalidad'}
-                parentAction={setValue}/>
+                  <InputField 
+                    idInput={'nacionalidad'} 
+                    type={'text'} 
+                    initialValue={cientificaObj.nacionalidad ? cientificaObj.nacionalidad : ''} 
+                    label={'Nacionalidad'}
+                    parentAction={setValue}/>
 
-              <InputField 
-                idInput={'foto'} 
-                type={'file'} 
-                initialValue={''} 
-                label={'Foto'}
-                parentAction={setValue}/>
-              
-              <InputField 
-                idInput={'descripcion'} 
-                type={'textarea'} 
-                initialValue={cientificaObj.descripcion ? cientificaObj.descripcion : ''} 
-                label={'Descripción'}
-                rows={5}
-                parentAction={setValue}/>
+                  <InputField 
+                    idInput={'foto'} 
+                    type={'file'} 
+                    initialValue={''} 
+                    label={'Foto'}
+                    parentAction={setValue}/>
+                  
+                  <InputField 
+                    idInput={'descripcion'} 
+                    type={'textarea'} 
+                    initialValue={cientificaObj.descripcion ? cientificaObj.descripcion : ''} 
+                    label={'Descripción'}
+                    rows={5}
+                    parentAction={setValue}/>
 
-              <div className="row mb-3">                  
-                  <RadioButton
-                    nameRadios={'area'}
-                    options={checksArray}
-                    label={'¿A qué área pertenece?'}
-                    initialValue={cientificaObj.area}
-                    parentAction={setValue}
-                  />
-              </div>
+                  <div className="row mb-3">                  
+                      <RadioButton
+                        nameRadios={'area'}
+                        options={checksArray}
+                        label={'¿A qué área pertenece?'}
+                        initialValue={cientificaObj.area}
+                        parentAction={setValue}
+                      />
+                  </div>
+                </Fragment>
+              }
             </form>
           </div>
           <div className="modal-footer">
