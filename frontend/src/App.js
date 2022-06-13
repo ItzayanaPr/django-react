@@ -105,17 +105,11 @@ function App() {
 			<hr className="my-5"/>
 			<section>
         <h1>Áreas de la ciencia.</h1>
-        <div className="row">
 				<div className="row">
-          <div className="col-md-6 col-12"></div>
-          <div className="col-md-6 col-12">
+					<div className="col-md-6 col-12"></div>
+					<div className="col-md-6 col-12">
 						<button className="btn btn-success float-end mx-2" onClick={() => setIsAddAreaModalOpen(true)}>Agregar area</button>								
-          </div>
-        </div>
-          <div className="col-md-6 col-12 col-md-offset-6">
-            {/* <button className="btn btn-primary float-end mx-2" onClick={returnToCientificasPage}>Ver cientificas</button> */}
-            						
-          </div>
+					</div>
         </div>
         <div className="row">
 						{
